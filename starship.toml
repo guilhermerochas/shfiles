@@ -1,0 +1,63 @@
+# ~/.config/starship.toml
+
+format = """
+$conda\
+$custom\
+$hostname\
+$directory\
+$java\
+$rust\
+$dart\
+$dotnet\
+$nodejs\
+$git_branch\
+$character"""
+
+add_newline = false
+scan_timeout = 0
+
+[character]
+success_symbol = "[λ](bold green)"
+error_symbol = "[λ](bold red)"
+
+[custom.user]
+format = "[$output]($style) "
+command = "whoami"
+style = "bold yellow"
+when = "true"
+
+[username]
+format = "[$user]($style) "
+disabled = false
+show_always = true
+
+[hostname]
+format = "at [$hostname]($style) "
+ssh_only = false
+
+[directory]
+format = "on [$path]($style)[$read_only]($read_only_style) "
+
+[java]
+format = "via [☕ java](bold red) "
+
+[dart]
+format = "via [🔰 dart](bold blue) "
+
+[rust]
+format = "via [⚙️ rust](bold red) "
+
+[dotnet]
+format = "via [🥅 .net](bold purple)"
+
+[conda]
+format = "( [$environment](dimmed green) ) "
+
+[python]
+format = "via [🐍 python](bold yellow) "
+
+[nodejs]
+format = "via [🤖 node](bold green) "
+
+[git_branch]
+format = "[\\($symbol$branch\\)]($style) "
