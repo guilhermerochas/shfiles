@@ -21,6 +21,27 @@ function dockssh() {
   docker exec -it $1 /bin/bash
 }
 
+# Bootstraping of a PotgreSQL database for fast initialization, for testing or local
+# development, which you can also provide your own sql file (if it doesn't contain the
+# name of the database) for bootstraping with the docker container initialized.
+# DB_NAME=postgres;USER=pguser;PASSWORD=12345678;
+function dbstrap() {
+  docker run --rm -d \
+    -e POSTGRES_PASSWORD=12345678 \
+    -e POSTGRES_DB=postgrss \
+    -e POSTGRES_USER=pguser \
+    -p 5432:5432 \
+    --name mydb \
+    -v $HOME/.local/pgdata:/var/lib/postgresql/data \
+    postgres:12-alpine
+
+  if [[ -n $1 && -f $1 ]]; then
+    docker cp $1 mydb:/docker-entrypoint-initdb.d/file.sql
+    docker exec mydb psql postgresql://pguser:12345678@localhost:5432/postgres \
+      -f /docker-entrypoint-initdb.d/file.sql
+  fi
+}
+
 # starts a qemu machine with with root access, first it checks if everything is setup,
 # like iso's, shasums, you know... then it creates the virtual machine if not already setup.
 # all the config and files goes under `$HOME/.config/alpine` directory.
