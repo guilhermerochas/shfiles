@@ -15,6 +15,43 @@ function docklean() {
   done
 }
 
+# Initiates a Maven project with a base configuration for creating a `fat jar`,
+# which is a jar with all the dependencies packed inside the file.
+function mavinit() {
+  if ! [[ -x $(command -v mvn) ]]; then
+    echo "maven is required for executing this command..." >&2
+    return 1
+  fi
+
+  if ! [[ -x $(command -v wget) ]]; then
+      echo "wget is required..." >&2
+      return 1
+  fi
+
+  if [[ -z $1 ]]; then
+    echo "you gotta pass the name of the artifactId as a parameter..." >&2
+    return 0
+  fi
+
+  local -r group_id="com.github.guilhermerochas" # CHANGE THIS
+  local artifact_id=$1
+  local -r pom_config_url=https://raw.githubusercontent.com/guilhermerochas/shfiles/main/pom.xml
+
+  mvn archetype:generate \
+   -DgroupId=$group_id \
+   -DartifactId=$artifact_id \
+   -DarchetypeArtifactId=maven-archetype-quickstart \
+   -DinteractiveMode=false
+
+  cd $artifact_id
+  wget $pom_config_url -O config.xml
+  local file_content=$(more config.xml)
+
+  sed -i "s/\/url>/\/url>\n $(echo $file_content | sed "s/\//\\\\\//g") \n/g" pom.xml
+  rm config.xml
+  cd ..
+}
+
 # ´ssh´ into docker machine using the exec command, just a helper for fast
 # executing this boring command :P
 function dockssh() {
