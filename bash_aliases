@@ -4,7 +4,7 @@
 # sometimes when building docker images, you can commit some mistake which will cause
 # an stopped container and an broken image with a <none> tag.
 # this function cleans all containers and images that were broken on the build process
-function docklean() {
+function docker_clean() {
   none_images=$(docker images | tail -n +2 | awk '$2=="<none>" { print $3 }')
   for image in $none_images; do
     containers=$(docker ps -a -f ancestor=$image | tail -n +2 | awk '{print $1}')
