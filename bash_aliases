@@ -52,12 +52,6 @@ function mavinit() {
   cd ..
 }
 
-# ´ssh´ into docker machine using the exec command, just a helper for fast
-# executing this boring command :P
-function dockssh() {
-  docker exec -it $1 /bin/bash
-}
-
 # enhance content of file via a docker pretrained model, use --help to see the options
 function enhance() { 
   docker run --rm -v "$(pwd)/`dirname ${@:$#}`":/ne/input -it alexjc/neural-enhance ${@:1:$#-1} "input/`basename ${@:$#}`" 
