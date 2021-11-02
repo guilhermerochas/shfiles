@@ -58,6 +58,11 @@ function dockssh() {
   docker exec -it $1 /bin/bash
 }
 
+# enhance content of file via a docker pretrained model, use --help to see the options
+function enhance() { 
+  docker run --rm -v "$(pwd)/`dirname ${@:$#}`":/ne/input -it alexjc/neural-enhance ${@:1:$#-1} "input/`basename ${@:$#}`" 
+}
+
 # Bootstraping of a PotgreSQL database for fast initialization, for testing or local
 # development, which you can also provide your own sql file (if it doesn't contain the
 # name of the database) for bootstraping with the docker container initialized.
