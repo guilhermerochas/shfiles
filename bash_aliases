@@ -15,6 +15,15 @@ function docker_clean() {
   done
 }
 
+# downloads m3u8 file joining all the TS files into a mp4 video
+function download() {
+  if [[ -n $1 ]]; then
+    if [[ -x $(command -v ffmpeg) ]]; then
+      ffmpeg -i "$1" -bsf:a aac_adtstoasc -vcodec copy -c copy -crf 50 "video-$(echo $RANDOM | md5sum | head -c 9).mp4"
+    fi
+  fi
+}
+
 # Initiates a Maven project with a base configuration for creating a `fat jar`,
 # which is a jar with all the dependencies packed inside the file.
 function mavinit() {
