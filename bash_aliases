@@ -207,3 +207,8 @@ alias \
     free="free -h" \
     sl="ls" \
     dutil="lsblk"
+
+# if running under WSL2, use windows call for explorer for open 
+if [[ $(uname -r | grep microsoft) ]]; then
+  alias open="explorer.exe"
+fi
